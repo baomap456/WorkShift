@@ -1,14 +1,19 @@
+/* eslint-disable prettier/prettier */
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
+import { LoginResponse } from './interface/login-response.interface';
 
 @Injectable()
 export class AuthService {
-    constructor (private readonly prismaService: PrismaService, private readonly jwtService: JwtService) {}
+    constructor(
+        private readonly prismaService: PrismaService,
+        private readonly jwtService: JwtService,
+    ) { }
 
-    async login(loginDto: LoginDto) {
+    async login(loginDto: LoginDto): Promise<LoginResponse> {
         const { email, password } = loginDto;
 
         const user = await this.prismaService.user.findUnique({
@@ -34,11 +39,11 @@ export class AuthService {
         return {
             access_token: this.jwtService.sign(payload),
             user: {
-                    id: user.id,
-                    email: user.email,
-                    name: user.fullName,
-                    role: user.role,
-                },
+                id: user.id,
+                email: user.email,
+                name: user.fullName,
+                role: user.role,
+            },
         };
     }
 }
