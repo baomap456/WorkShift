@@ -1,0 +1,127 @@
+// backend/prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+// --- ENUMS ---
+enum Role {
+  ADMIN
+  STAFF
+}
+
+enum EmployeeType {
+  FULL_TIME
+  PART_TIME
+}
+
+enum SwapStatus {
+  PENDING
+  ACCEPTED
+  APPROVED
+  REJECTED
+}
+
+// --- MODELS ---
+
+model User {
+  id         Int          @id @default(autoincrement())
+  email      String       @unique
+  password   String
+  fullName   String
+  role       Role         @default(STAFF)
+  type       EmployeeType @default(PART_TIME)
+  baseSalary Int          @default(25000) // Lương mặc định
+  isActive   Boolean      @default(true)
+  createdAt  DateTime     @default(now())
+
+  // Quan hệ ngược
+  availabilities  EmployeeAvailability[]
+  workSchedules   WorkSchedule[]
+  attendances     Attendance[]
+  monthlySalaries MonthlySalary[]
+  sentSwaps       ShiftSwapRequest[]     @relation("SentSwaps")
+  receivedSwaps   ShiftSwapRequest[]     @relation("ReceivedSwaps")
+}
+
+model Shift {
+  id        Int    @id @default(autoincrement())
+  name      String // VD: "Ca Sáng"
+  startTime String // "08:00"
+  endTime   String // "12:00"
+  unitPrice Int? // Giá tiền riêng cho ca này (nếu có)
+
+  availabilities EmployeeAvailability[]
+  workSchedules  WorkSchedule[]
+}
+
+model EmployeeAvailability {
+  id      Int      @id @default(autoincrement())
+  userId  Int
+  shiftId Int
+  date    DateTime @db.Date
+
+  user  User  @relation(fields: [userId], references: [id])
+  shift Shift @relation(fields: [shiftId], references: [id])
+
+  @@unique([userId, shiftId, date]) // Một người không thể báo rảnh 2 lần cho 1 ca trong 1 ngày
+}
+
+model WorkSchedule {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  shiftId     Int
+  date        DateTime @db.Date
+  isPublished Boolean  @default(false)
+
+  user  User  @relation(fields: [userId], references: [id])
+  shift Shift @relation(fields: [shiftId], references: [id])
+
+  attendance   Attendance?
+  swapRequests ShiftSwapRequest[]
+}
+
+model ShiftSwapRequest {
+  id             Int        @id @default(autoincrement())
+  workScheduleId Int
+  senderId       Int
+  receiverId     Int? // Null nếu gửi lên chợ (Pool)
+  reason         String?
+  status         SwapStatus @default(PENDING)
+  createdAt      DateTime   @default(now())
+
+  schedule WorkSchedule @relation(fields: [workScheduleId], references: [id])
+  sender   User         @relation("SentSwaps", fields: [senderId], references: [id])
+  receiver User?        @relation("ReceivedSwaps", fields: [receiverId], references: [id])
+}
+
+model Attendance {
+  id             Int       @id @default(autoincrement())
+  userId         Int
+  workScheduleId Int       @unique
+  checkIn        DateTime  @default(now())
+  checkOut       DateTime?
+  status         String? // "LATE", "EARLY", "ON_TIME"
+
+  user     User         @relation(fields: [userId], references: [id])
+  schedule WorkSchedule @relation(fields: [workScheduleId], references: [id])
+}
+
+model MonthlySalary {
+  id          Int     @id @default(autoincrement())
+  userId      Int
+  month       Int
+  year        Int
+  totalHours  Float   @default(0)
+  totalSalary Int     @default(0)
+  isPaid      Boolean @default(false)
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, month, year])
+}
