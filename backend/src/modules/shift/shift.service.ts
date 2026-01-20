@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
-import { Shift, Prisma } from '../../generated/prisma/client.js';
+import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { Shift, Prisma } from '@prisma/client';
 
 @Injectable()
 export class ShiftService {

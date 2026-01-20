@@ -6,6 +6,22 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors();
-  await app.listen(process.env.PORT ?? 3000);
+
+  const port = process.env.PORT ?? 3000;
+  await app.listen(port);
+
+  console.log(`
+╔═══════════════════════════════════════════════════════╗
+║                                                       ║
+║   🚀 WorkShift Server is running!                    ║
+║                                                       ║
+║   📡 Local:   http://localhost:${port}                   ║
+║   🌍 Network: http://your-ip:${port}                     ║
+║                                                       ║
+║   📝 Environment: ${process.env.NODE_ENV || 'development'}                    ║
+║   ⚡ Ready to handle requests                        ║
+║                                                       ║
+╔═══════════════════════════════════════════════════════╗
+  `);
 }
 bootstrap();

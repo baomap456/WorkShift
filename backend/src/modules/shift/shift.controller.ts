@@ -11,7 +11,7 @@ import {
 import { ShiftService } from "./shift.service";
 import { CreateShiftDto } from "./dto/create-shift.dto";
 import { UpdateShiftDto } from "./dto/update-shift.dto";
-import { Shift as ShiftModel } from "../../generated/prisma";
+import { Shift as ShiftModel } from '@prisma/client';
 
 @Controller("shift")
 export class ShiftController {

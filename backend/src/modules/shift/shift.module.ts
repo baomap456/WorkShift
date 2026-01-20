@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ShiftService } from './shift.service';
 import { ShiftController } from './shift.controller';
+import { PrismaService } from 'src/modules/prisma/prisma.service';
+
 
 @Module({
   controllers: [ShiftController],
