@@ -7,6 +7,7 @@ import { PrismaService } from './modules/prisma/prisma.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { ShiftModule } from './modules/shift/shift.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { PrismaModule } from './modules/prisma/prisma.module';
     AuthModule,
     ShiftModule,
     PrismaModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

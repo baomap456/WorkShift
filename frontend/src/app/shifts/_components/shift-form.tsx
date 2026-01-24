@@ -4,6 +4,7 @@ import { createShift, updateShift } from '../actions';
 import { useFormStatus } from 'react-dom';
 import { Shift } from '../types';
 import { int } from 'zod';
+import { formatTimeForInput } from '../utils';
 
 interface ShiftFormProps {
     initialData?: Shift;
@@ -35,11 +36,11 @@ export default function ShiftForm({ initialData }: ShiftFormProps) {
     return (
         <form action={handleSubmit} className="space-y-4 border p-6 rounded-lg bg-white shadow-sm">
             <div>
-                <label className="block text-sm font-medium text-gray-700">Tên ca</label>
+                <label className="block text-sm font-medium text-gray-900 font-bold">Tên ca</label>
                 <input
                     name="name"
                     defaultValue={initialData?.name}
-                    className="mt-1 block w-full rounded-md border border-gray-300 p-2"
+                    className="mt-1 block w-full rounded-md border border-gray-300 text-gray-900 p-2.5"
                     required
                     placeholder="Ví dụ: Ca Sáng"
                 />
@@ -47,26 +48,38 @@ export default function ShiftForm({ initialData }: ShiftFormProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Bắt đầu</label>
+                    <label className="block text-sm font-medium text-gray-900 font-bold">Bắt đầu</label>
                     <input
                         name="startTime"
-                        type="datetime-local"
-                        defaultValue={initialData?.startTime}
-                        className="mt-1 block w-full rounded-md border border-gray-300 p-2"
+                        type="time"
+                        defaultValue={formatTimeForInput(initialData?.startTime)}
+                        className="mt-1 block w-full rounded-md border border-gray-300 text-gray-900 p-2.5"
                         required
                     />
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Kết thúc</label>
+                    <label className="block text-sm font-medium text-gray-900 font-bold">Kết thúc</label>
                     <input
                         name="endTime"
-                        type="datetime-local"
-                        defaultValue={initialData?.endTime}
-                        className="mt-1 block w-full rounded-md border border-gray-300 p-2"
+                        type="time"
+                        defaultValue={formatTimeForInput(initialData?.endTime)}
+                        className="mt-1 block w-full rounded-md border border-gray-300 text-gray-900 p-2.5"
                         required
                     />
                 </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-900 font-bold">Tiền/giờ</label>
+                    <input
+                        name="unitPrice"
+                        defaultValue={initialData?.unitPrice}
+                        className="mt-1 block w-full rounded-md border border-gray-300 text-gray-900 p-2.5"
+                        required
+                        placeholder="Ví dụ: 100000"
+                    />
+                </div>
+
             </div>
 
             <div className="pt-2">

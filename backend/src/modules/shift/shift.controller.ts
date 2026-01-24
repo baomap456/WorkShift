@@ -7,6 +7,7 @@ import {
   Patch,
   Param,
   Delete,
+  ParseIntPipe,
 } from "@nestjs/common";
 import { ShiftService } from "./shift.service";
 import { CreateShiftDto } from "./dto/create-shift.dto";
@@ -28,17 +29,17 @@ export class ShiftController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<ShiftModel | null> {
-    return this.shiftService.findOne({ id: Number(id) });
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<ShiftModel | null> {
+    return this.shiftService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateShiftDto: UpdateShiftDto): Promise<ShiftModel> {
-    return this.shiftService.update({ id: Number(id) }, updateShiftDto);
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateShiftDto: UpdateShiftDto): Promise<ShiftModel> {
+    return this.shiftService.update(id, updateShiftDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<void> {
-    return this.shiftService.remove({ id: Number(id) });
+  remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    return this.shiftService.remove(id);
   }
 }

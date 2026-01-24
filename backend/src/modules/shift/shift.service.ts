@@ -1,12 +1,14 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
-import { Shift, Prisma } from '@prisma/client';
+import { Shift } from '@prisma/client';
+import { CreateShiftDto } from './dto/create-shift.dto';
+import { UpdateShiftDto } from './dto/update-shift.dto';
 
 @Injectable()
 export class ShiftService {
   constructor(private prisma: PrismaService) { }
-  async create(data: Prisma.ShiftCreateInput): Promise<Shift> {
+  async create(data: CreateShiftDto): Promise<Shift> {
     return this.prisma.shift.create({
       data,
     })
@@ -16,22 +18,22 @@ export class ShiftService {
     return this.prisma.shift.findMany();
   }
 
-  async findOne(idShift: Prisma.ShiftWhereUniqueInput): Promise<Shift | null> {
+  async findOne(idShift: number): Promise<Shift | null> {
     return this.prisma.shift.findUnique({
-      where: idShift,
+      where: { id: idShift },
     });
   }
 
-  update(idShift: Prisma.ShiftWhereUniqueInput, data: Prisma.ShiftUpdateInput): Promise<Shift> {
+  update(idShift: number, data: UpdateShiftDto): Promise<Shift> {
     return this.prisma.shift.update({
-      where: idShift,
+      where: { id: idShift },
       data,
     });
   }
 
-  async remove(idShift: Prisma.ShiftWhereUniqueInput): Promise<void> {
+  async remove(idShift: number): Promise<void> {
     await this.prisma.shift.delete({
-      where: idShift,
+      where: { id: idShift },
     });
   }
 }

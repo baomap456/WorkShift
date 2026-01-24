@@ -3,6 +3,7 @@
 import { Shift } from '../types';
 import Link from 'next/link';
 import { deleteShift } from '../actions';
+import { formatTimeForInput } from '../utils';
 
 export default function ShiftList({ shifts }: { shifts: Shift[] }) {
     if (shifts.length === 0) {
@@ -16,10 +17,15 @@ export default function ShiftList({ shifts }: { shifts: Shift[] }) {
                     <div>
                         <h3 className="font-bold text-lg text-gray-800">{shift.name}</h3>
                         <p className="text-gray-500 text-sm">
-                            {new Date(shift.startTime).toLocaleString()}
+                            {formatTimeForInput(shift.startTime)}
                             <span className="mx-2 text-gray-400">→</span>
-                            {new Date(shift.endTime).toLocaleString()}
+                            {formatTimeForInput(shift.endTime)}
                         </p>
+                        {shift.unitPrice !== undefined && (
+                            <p className="text-gray-500 text-sm">
+                                Giá đơn vị: {shift.unitPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                            </p>
+                        )}
                     </div>
 
                     <div className="flex gap-3">

@@ -1,15 +1,19 @@
 'use server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { convertTimeToIso } from './utils';
 
 const API = process.env.API_URL!;
 
 export async function createShift(data: FormData) {
     const rawData = {
         name: data.get('name') as string,
-        startTime: data.get('startDate') as string,
-        endTime: data.get('endDate') as string,
+        startTime: convertTimeToIso(data.get('startTime') as string),
+        endTime: convertTimeToIso(data.get('endTime') as string),
+        unitPrice: data.get('unitPrice') ? Number(data.get('unitPrice')) : undefined,
     }
+
+    console.log('🚀 [Debug] Sending Data to NestJS (Create):', rawData);
 
     const res = await fetch(`${API}/shift`, {
         method: 'POST',
@@ -18,6 +22,8 @@ export async function createShift(data: FormData) {
     });
 
     if (!res.ok) {
+        const errorResponse = await res.text();
+        console.error('❌ [Debug] Backend Error:', res.status, errorResponse);
         throw new Error('Failed to create shift');
     }
 
@@ -28,8 +34,9 @@ export async function createShift(data: FormData) {
 export async function updateShift(id: number, formData: FormData) {
     const rawData = {
         name: formData.get('name'),
-        startTime: formData.get('startTime'),
-        endTime: formData.get('endTime'),
+        startTime: convertTimeToIso(formData.get('startTime') as string),
+        endTime: convertTimeToIso(formData.get('endTime') as string),
+        unitPrice: formData.get('unitPrice') ? Number(formData.get('unitPrice')) : undefined,
     };
 
     const res = await fetch(`${API}/shift/${id}`, {
