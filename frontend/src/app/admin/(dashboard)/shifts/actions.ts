@@ -3,7 +3,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { convertTimeToIso } from './utils';
 
-const API = process.env.API_URL!;
+const API = process.env.NEXT_PUBLIC_API_URL!;
 
 export async function createShift(data: FormData) {
     const rawData = {
@@ -15,7 +15,7 @@ export async function createShift(data: FormData) {
 
     console.log('🚀 [Debug] Sending Data to NestJS (Create):', rawData);
 
-    const res = await fetch(`${API}/shift`, {
+    const res = await fetch(`${API}/shifts`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(rawData),
@@ -39,7 +39,7 @@ export async function updateShift(id: number, formData: FormData) {
         unitPrice: formData.get('unitPrice') ? Number(formData.get('unitPrice')) : undefined,
     };
 
-    const res = await fetch(`${API}/shift/${id}`, {
+    const res = await fetch(`${API}/shifts/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(rawData),
@@ -52,7 +52,7 @@ export async function updateShift(id: number, formData: FormData) {
 }
 
 export async function deleteShift(id: number) {
-    const res = await fetch(`${API}/shift/${id}`, {
+    const res = await fetch(`${API}/shifts/${id}`, {
         method: 'DELETE',
     });
 

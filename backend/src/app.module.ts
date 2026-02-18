@@ -5,9 +5,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaService } from './modules/prisma/prisma.service';
 import { AuthModule } from './modules/auth/auth.module';
-import { ShiftModule } from './modules/shift/shift.module';
+import { ShiftModule } from './modules/shifts/shift.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
-import { UserModule } from './user/user.module';
+import { UserModule } from './modules/users/user.module';
 
 @Module({
   imports: [

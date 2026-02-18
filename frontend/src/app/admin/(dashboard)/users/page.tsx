@@ -3,7 +3,7 @@ import UserList from './_components/user-list';
 import { User } from './types';
 
 async function getUsers(): Promise<User[]> {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
         cache: 'no-store',
     });
     if (!res.ok) throw new Error('Failed to fetch users');

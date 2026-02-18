@@ -1,9 +1,10 @@
 'use server';
 
+import api from '@/src/lib/axios';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-const API_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL}/users`;
+const API = `${process.env.NEXT_PUBLIC_API_URL}/users`;
 
 export async function createUser(formData: FormData) {
     const rawData = {
@@ -15,7 +16,7 @@ export async function createUser(formData: FormData) {
         isActive: formData.get('isActive') === 'on',
     };
 
-    const res = await fetch(API_URL, {
+        const res = await fetch(API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(rawData),
@@ -42,7 +43,7 @@ export async function updateUser(id: number, formData: FormData) {
         isActive: formData.get('isActive') === 'on',
     };
 
-    const res = await fetch(`${API_URL}/${id}`, {
+    const res = await fetch(`${API}/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(rawData),
@@ -56,7 +57,7 @@ export async function updateUser(id: number, formData: FormData) {
 
 // 3. DELETE
 export async function deleteUser(id: number) {
-    const res = await fetch(`${API_URL}/${id}`, {
+    const res = await fetch(`${API}/${id}`, {
         method: 'DELETE',
     });
 

@@ -4,7 +4,7 @@ import { User } from '../../types';
 import { notFound } from 'next/navigation'; // Import hàm notFound
 
 async function getUserById(id: string): Promise<User | null> {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/${id}`, { cache: 'no-store' });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}`, { cache: 'no-store' });
     if (res.status === 404) return null; // Trả về null nếu không thấy
     if (!res.ok) throw new Error('Backend Error');
     return res.json();

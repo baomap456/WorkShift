@@ -14,7 +14,7 @@ import { CreateShiftDto } from "./dto/create-shift.dto";
 import { UpdateShiftDto } from "./dto/update-shift.dto";
 import { Shift as ShiftModel } from '@prisma/client';
 
-@Controller("shift")
+@Controller("shifts")
 export class ShiftController {
   constructor(private readonly shiftService: ShiftService) { }
 

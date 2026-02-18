@@ -3,7 +3,7 @@ import ShiftList from './_components/shift-list';
 import { Shift } from './types';
 
 async function getShifts(): Promise<Shift[]> {
-    const respone = await fetch(`${process.env.API_URL}/shift`, {
+    const respone = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/shifts`, {
         cache: 'no-store',
     });
 
