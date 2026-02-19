@@ -7,3 +7,5 @@ export interface Shift {
 }
 
 export type CreateShiftInput = Omit<Shift, 'id'>;
+
+export type UpdateShiftInput = CreateShiftInput;

@@ -2,11 +2,12 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { convertTimeToIso } from './utils';
+import {CreateShiftInput, UpdateShiftInput} from './types';
 
 const API = process.env.NEXT_PUBLIC_API_URL!;
 
 export async function createShift(data: FormData) {
-    const rawData = {
+    const rawData : CreateShiftInput = {
         name: data.get('name') as string,
         startTime: convertTimeToIso(data.get('startTime') as string),
         endTime: convertTimeToIso(data.get('endTime') as string),
@@ -32,8 +33,8 @@ export async function createShift(data: FormData) {
 }
 
 export async function updateShift(id: number, formData: FormData) {
-    const rawData = {
-        name: formData.get('name'),
+    const rawData: UpdateShiftInput = {
+        name: formData.get('name') as string,
         startTime: convertTimeToIso(formData.get('startTime') as string),
         endTime: convertTimeToIso(formData.get('endTime') as string),
         unitPrice: formData.get('unitPrice') ? Number(formData.get('unitPrice')) : undefined,

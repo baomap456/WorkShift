@@ -3,15 +3,16 @@
 import api from '@/src/lib/axios';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { CreateUserInput, EmployeeType, Role, UpdateUserInput } from './types';
 
 const API = `${process.env.NEXT_PUBLIC_API_URL}/users`;
 
 export async function createUser(formData: FormData) {
-    const rawData = {
-        fullName: formData.get('fullName'),
-        email: formData.get('email'),
-        role: formData.get('role'),
-        type: formData.get('type'),
+    const rawData: CreateUserInput = {
+        fullName: formData.get('fullName') as string,
+        email: formData.get('email') as string,
+        role: formData.get('role') as Role,
+        type: formData.get('type') as EmployeeType,
         baseSalary: Number(formData.get('baseSalary')),
         isActive: formData.get('isActive') === 'on',
     };
@@ -34,11 +35,11 @@ export async function createUser(formData: FormData) {
 
 // 2. UPDATE
 export async function updateUser(id: number, formData: FormData) {
-    const rawData = {
-        fullName: formData.get('fullName'),
-        email: formData.get('email'),
-        role: formData.get('role'),
-        type: formData.get('type'),
+    const rawData: UpdateUserInput = {
+        fullName: formData.get('fullName') as string,
+        email: formData.get('email') as string,
+        role: formData.get('role') as Role,
+        type: formData.get('type') as EmployeeType,
         baseSalary: Number(formData.get('baseSalary')),
         isActive: formData.get('isActive') === 'on',
     };

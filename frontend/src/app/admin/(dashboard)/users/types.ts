@@ -14,9 +14,13 @@ export interface User {
     fullName: string;
     email: string;
     role: Role;
-    employeeType?: EmployeeType;
+    type?: EmployeeType;
     baseSalary: number;
     isActive: boolean;
 }
+
+export type CreateUserInput = Omit<User, 'id'>;
+
+export type UpdateUserInput = Omit<User, 'id'>;
 
 export type UserWithId = User;

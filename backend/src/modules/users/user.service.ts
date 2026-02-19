@@ -1,12 +1,17 @@
 /* eslint-disable prettier/prettier */
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
-import { User } from '@prisma/client';
+import { Role, User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
-
+const RESTRICTED_FIELDS_CONFIG: Partial<Record<keyof UpdateUserDto, string>> = {
+  role: 'Bạn không có quyền thay đổi chức vụ (Role)',
+  baseSalary: 'Bạn không có quyền thay đổi lương cơ bản',
+  type: 'Bạn không có quyền thay đổi loại hợp đồng',
+  isActive: 'Bạn không có quyền kích hoạt/vô hiệu hóa tài khoản',
+};
 
 @Injectable()
 export class UserService {
@@ -65,9 +70,22 @@ export class UserService {
   }
 
 
-  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+  async update(id: number, updateUserDto: UpdateUserDto,currentUserRole: Role): Promise<User> {
     if (updateUserDto.password) {
       updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
+    }
+
+    if (currentUserRole !== Role.ADMIN) {
+      const updates = Object.keys(updateUserDto); 
+
+      for (const field of updates) {
+        const errorMessage = RESTRICTED_FIELDS_CONFIG[field];
+        
+        if (errorMessage) {
+          console.warn(`[Security Alert] Non-admin user trying to update forbidden field: ${field}`);
+          throw new ForbiddenException(errorMessage);
+        }
+      }
     }
 
     try {
